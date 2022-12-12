@@ -14,7 +14,7 @@ typedef enum dom_element {
     Bold,
     Italic,
     Underline,
-    Strikethrough,
+    Struck,
 
     Header1,
     Header2,

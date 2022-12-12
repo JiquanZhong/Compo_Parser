@@ -23,7 +23,7 @@ const char *tokens[] = {
     "Bold",
     "Italic",
     "Underline",
-    "Strikethrough",
+    "Struck",
     "Header1",
     "Header2",
     "Header3",
@@ -81,6 +81,7 @@ DOM* dom_root = NULL;
 %token NEWLINE BLANK_LINE
 %token BOLD
 %token UNDERLINE
+%token STRUCK
 %token H6
 %token H5
 %token H4
@@ -107,6 +108,10 @@ text:
     }
     | UNDERLINE text UNDERLINE{
         DOM* dom = new_dom(Underline, $2);
+        $$ = new_dom_list(dom);
+    }
+    | STRUCK text STRUCK{
+        DOM* dom = new_dom(Struck, $2);
         $$ = new_dom_list(dom);
     };
 line:
