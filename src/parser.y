@@ -82,6 +82,7 @@ DOM* dom_root = NULL;
 %token BOLD
 %token UNDERLINE
 %token STRUCK
+%token ITALIC
 %token H6
 %token H5
 %token H4
@@ -112,6 +113,10 @@ text:
     }
     | STRUCK text STRUCK{
         DOM* dom = new_dom(Struck, $2);
+        $$ = new_dom_list(dom);
+    }
+    | ITALIC text ITALIC{
+        DOM* dom = new_dom(Italic, $2);
         $$ = new_dom_list(dom);
     };
 line:
