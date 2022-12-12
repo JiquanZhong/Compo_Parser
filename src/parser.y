@@ -80,6 +80,7 @@ DOM* dom_root = NULL;
 
 %token NEWLINE BLANK_LINE
 %token BOLD
+%token UNDERLINE
 %token H6
 %token H5
 %token H4
@@ -102,6 +103,10 @@ text:
     }
     | BOLD text BOLD {
         DOM* dom = new_dom(Bold, $2);
+        $$ = new_dom_list(dom);
+    }
+    | UNDERLINE text UNDERLINE{
+        DOM* dom = new_dom(Underline, $2);
         $$ = new_dom_list(dom);
     };
 line:

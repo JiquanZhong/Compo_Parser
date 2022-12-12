@@ -77,6 +77,7 @@ NUMBER
 
 newline "\n"
 bold "**"
+underline "__"
 h6 "######"[[:blank:]]*
 h5 "#####"[[:blank:]]*
 h4 "####"[[:blank:]]*
@@ -84,7 +85,7 @@ h3 "###"[[:blank:]]*
 h2 "##"[[:blank:]]*
 h1 "#"[[:blank:]]*
 
-%x BOLD_MODE TEXT_MODE
+%x BOLD_MODE TEXT_MODE UNDERLINE_MODE
 
 %%
 
@@ -126,23 +127,33 @@ h1 "#"[[:blank:]]*
     return BOLD;
 };
 
+<INITIAL>{underline}	{
+    BEGIN_MODE(UNDERLINE_MODE); // You can switch to another mode
+
+    return UNDERLINE;
+};
+
 <BOLD_MODE>{bold} {
     END_MODE; // It will go back to the previous mode
-
     return BOLD;
+};
+
+<UNDERLINE_MODE>{underline} {
+    END_MODE; // It will go back to the previous mode
+    return UNDERLINE;
 };
 
 <INITIAL,BOLD_MODE>. {
     BEGIN_MODE(TEXT_MODE);
-
-    // yytext is containing the text captured by the regular
-    // expression.
-    // The expression "*yytext" is to catch only one character (the first one).
-    // We will append our character in a global string
     strbufapp(*yytext);
 };
 
-<TEXT_MODE>({newline}|{bold}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
+<INITIAL,UNDERLINE_MODE>. {
+    BEGIN_MODE(TEXT_MODE);
+    strbufapp(*yytext);
+};
+
+<TEXT_MODE>({newline}|{bold}|{underline}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
     END_MODE;
 
     // We give the full capture to Flex to be analyzed again

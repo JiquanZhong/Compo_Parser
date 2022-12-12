@@ -16,6 +16,7 @@
 
 **abc**
 *abc*
+__abc__
 ~~abc~~
 ++abc++
 ==abc==
