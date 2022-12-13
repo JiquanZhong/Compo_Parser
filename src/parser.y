@@ -83,6 +83,7 @@ DOM* dom_root = NULL;
 %token UNDERLINE
 %token STRUCK
 %token ITALIC
+%token HRULE
 %token QUOTE
 %token H6
 %token H5
@@ -135,7 +136,9 @@ paragraph:
     }
     | line { $$ = $1; };
 block:
-    QUOTE TEXT {
+    HRULE{
+        $$ = new_dom(HRule, NULL);
+    }|QUOTE TEXT {
         $$ = new_dom(Quote, NULL);
         $$->text = $2;
     }
