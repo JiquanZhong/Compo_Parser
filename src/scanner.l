@@ -81,7 +81,7 @@ underline "__"
 struck "~~"
 italic "*"
 inlinecode "‘"
-hrule "---"
+hrule "---"[-]*
 quote ">"[[:blank:]]*
 h6 "######"[[:blank:]]*
 h5 "#####"[[:blank:]]*

@@ -22,6 +22,8 @@ I'm *abc*
 
 ---
 
+---------
+
 I'm ‘Inline Code‘
 
 Paragraph after inline code
