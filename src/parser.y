@@ -83,6 +83,7 @@ DOM* dom_root = NULL;
 %token UNDERLINE
 %token STRUCK
 %token ITALIC
+%token BLOCKCODE
 %token INLINECODE
 %token HRULE
 %token QUOTE
@@ -122,6 +123,10 @@ text:
         DOM* dom = new_dom(Italic, $2);
         $$ = new_dom_list(dom);
     }
+    | BLOCKCODE text BLOCKCODE{
+        DOM* dom = new_dom(BlockCode, $2);
+        $$ = new_dom_list(dom);
+    }
     | INLINECODE text INLINECODE{
         DOM* dom = new_dom(InlineCode, $2);
         $$ = new_dom_list(dom);
@@ -139,7 +144,8 @@ paragraph:
         while (curr->next != NULL) curr = curr->next;
         curr->next = $3;
     }
-    | line { $$ = $1; };
+    | line { $$ = $1; }
+    ;
 block:
     HRULE{
         $$ = new_dom(HRule, NULL);

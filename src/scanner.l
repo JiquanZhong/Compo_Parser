@@ -55,8 +55,8 @@ RPAREN
 LBRACKET
 RBRACKET
 HR
-INLINE_CODE
 BLOCK_CODE
+INLINE_CODE
 XSVG_BEGIN
 XSVG_END
 COMMA
@@ -80,6 +80,7 @@ bold "**"
 underline "__"
 struck "~~"
 italic "*"
+blockcode "‘‘‘"
 inlinecode "‘"
 hrule "---"[-]*
 quote ">"[[:blank:]]*
@@ -90,7 +91,7 @@ h3 "###"[[:blank:]]*
 h2 "##"[[:blank:]]*
 h1 "#"[[:blank:]]*
 
-%x BOLD_MODE TEXT_MODE UNDERLINE_MODE STRUCK_MODE ITALIC_MODE INLINE_CODE_MODE
+%x BOLD_MODE TEXT_MODE UNDERLINE_MODE STRUCK_MODE ITALIC_MODE BLOCK_CODE_MODE INLINE_CODE_MODE
 
 %%
 
@@ -158,6 +159,12 @@ h1 "#"[[:blank:]]*
     return ITALIC;
 };
 
+<INITIAL>{blockcode}	{
+    BEGIN_MODE(BLOCK_CODE_MODE); // You can switch to another mode
+
+    return BLOCKCODE;
+};
+
 <INITIAL>{inlinecode}	{
     BEGIN_MODE(INLINE_CODE_MODE); // You can switch to another mode
 
@@ -184,10 +191,17 @@ h1 "#"[[:blank:]]*
     return ITALIC;
 };
 
+
+<BLOCK_CODE_MODE>{blockcode} {
+    END_MODE; // It will go back to the previous mode
+    return BLOCKCODE;
+};
+
 <INLINE_CODE_MODE>{inlinecode} {
     END_MODE; // It will go back to the previous mode
     return INLINECODE;
 };
+
 
 <INITIAL,BOLD_MODE>. {
     BEGIN_MODE(TEXT_MODE);
@@ -209,12 +223,18 @@ h1 "#"[[:blank:]]*
     strbufapp(*yytext);
 }
 
+<INITIAL,BLOCK_CODE_MODE>. {
+    BEGIN_MODE(TEXT_MODE);
+    strbufapp(*yytext);
+}
+
 <INITIAL,INLINE_CODE_MODE>. {
     BEGIN_MODE(TEXT_MODE);
     strbufapp(*yytext);
 }
 
-<TEXT_MODE>({newline}|{bold}|{underline}|{struck}|{italic}|{inlinecode}|^{hrule}|^{quote}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
+
+<TEXT_MODE>({newline}|{bold}|{underline}|{struck}|{italic}|{blockcode}|{inlinecode}|^{hrule}|^{quote}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
     END_MODE;
 
     // We give the full capture to Flex to be analyzed again

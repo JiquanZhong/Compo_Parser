@@ -11,9 +11,7 @@
 ###### title6
 
 I am **bold**!
-
-I'm **abc**
-
+I'm **abasc**
 I'm ~~abc~~
 
 I'm *abc*
@@ -28,3 +26,8 @@ I'm ‘Inline Code‘
 
 Paragraph after inline code
 
+‘‘‘
+first line code
+‘‘‘
+
+Paragraph after inline code
