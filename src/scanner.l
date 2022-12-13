@@ -80,6 +80,7 @@ bold "**"
 underline "__"
 struck "~~"
 italic "*"
+quote ">"[[:blank:]]*
 h6 "######"[[:blank:]]*
 h5 "#####"[[:blank:]]*
 h4 "####"[[:blank:]]*
@@ -98,6 +99,10 @@ h1 "#"[[:blank:]]*
 ([[:blank:]]*{newline}){2} {
     return BLANK_LINE;
 };
+
+^{quote} {
+    return QUOTE;
+}
 
 ^{h6} {
     return H6;
@@ -187,7 +192,7 @@ h1 "#"[[:blank:]]*
     strbufapp(*yytext);
 }
 
-<TEXT_MODE>({newline}|{bold}|{underline}|{struck}|{italic}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
+<TEXT_MODE>({newline}|{bold}|{underline}|{struck}|{italic}|^{quote}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
     END_MODE;
 
     // We give the full capture to Flex to be analyzed again
