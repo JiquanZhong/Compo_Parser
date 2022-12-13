@@ -12,12 +12,17 @@
 
 I am **bold**!
 
-**abc**
+I'm **abc**
 
-~~abc~~
+I'm ~~abc~~
 
-*abc*
+I'm *abc*
 
 > abc Hello World
 
 ---
+
+I'm ‘Inline Code‘
+
+Paragraph after inline code
+

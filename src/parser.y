@@ -83,6 +83,7 @@ DOM* dom_root = NULL;
 %token UNDERLINE
 %token STRUCK
 %token ITALIC
+%token INLINECODE
 %token HRULE
 %token QUOTE
 %token H6
@@ -120,6 +121,10 @@ text:
     | ITALIC text ITALIC{
         DOM* dom = new_dom(Italic, $2);
         $$ = new_dom_list(dom);
+    }
+    | INLINECODE text INLINECODE{
+        DOM* dom = new_dom(InlineCode, $2);
+        $$ = new_dom_list(dom);
     };
 line:
     text line {
@@ -138,7 +143,8 @@ paragraph:
 block:
     HRULE{
         $$ = new_dom(HRule, NULL);
-    }|QUOTE TEXT {
+    }
+    |QUOTE TEXT {
         $$ = new_dom(Quote, NULL);
         $$->text = $2;
     }

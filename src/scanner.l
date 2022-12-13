@@ -80,6 +80,7 @@ bold "**"
 underline "__"
 struck "~~"
 italic "*"
+inlinecode "‘"
 hrule "---"
 quote ">"[[:blank:]]*
 h6 "######"[[:blank:]]*
@@ -89,7 +90,7 @@ h3 "###"[[:blank:]]*
 h2 "##"[[:blank:]]*
 h1 "#"[[:blank:]]*
 
-%x BOLD_MODE TEXT_MODE UNDERLINE_MODE STRUCK_MODE ITALIC_MODE
+%x BOLD_MODE TEXT_MODE UNDERLINE_MODE STRUCK_MODE ITALIC_MODE INLINE_CODE_MODE
 
 %%
 
@@ -157,6 +158,12 @@ h1 "#"[[:blank:]]*
     return ITALIC;
 };
 
+<INITIAL>{inlinecode}	{
+    BEGIN_MODE(INLINE_CODE_MODE); // You can switch to another mode
+
+    return INLINECODE;
+};
+
 <BOLD_MODE>{bold} {
     END_MODE; // It will go back to the previous mode
     return BOLD;
@@ -175,6 +182,11 @@ h1 "#"[[:blank:]]*
 <ITALIC_MODE>{italic} {
     END_MODE; // It will go back to the previous mode
     return ITALIC;
+};
+
+<INLINE_CODE_MODE>{inlinecode} {
+    END_MODE; // It will go back to the previous mode
+    return INLINECODE;
 };
 
 <INITIAL,BOLD_MODE>. {
@@ -197,7 +209,12 @@ h1 "#"[[:blank:]]*
     strbufapp(*yytext);
 }
 
-<TEXT_MODE>({newline}|{bold}|{underline}|{struck}|{italic}|^{hrule}|^{quote}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
+<INITIAL,INLINE_CODE_MODE>. {
+    BEGIN_MODE(TEXT_MODE);
+    strbufapp(*yytext);
+}
+
+<TEXT_MODE>({newline}|{bold}|{underline}|{struck}|{italic}|{inlinecode}|^{hrule}|^{quote}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
     END_MODE;
 
     // We give the full capture to Flex to be analyzed again
