@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "ast.h"
+#include "code_generation.h"
+#include "simple_strings.h"
 
 #define CHECK_YYNOMEM(ptr) if ((ptr) == NULL) YYNOMEM;
 #define CHECK_LENGTH(var, num) if ((num) >= 0) var = num; else { yyerror("negative length"); YYERROR; }
@@ -319,6 +321,14 @@ int main(int argc, char* argv[]) {
     if (ret > 0) return ret;
     else {
         dom_display(dom_root, 1);
+
+        string code = code_generation(dom_root);
+
+        FILE* fres = fopen("out/result.html", "w");
+
+        fprintf(fres, "%s", code);
+
+        fclose(fres);
 
         free_dom(dom_root);
     }
