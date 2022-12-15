@@ -108,6 +108,23 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
 
             return html;
         }
+        case Quote: {
+            string html = STR("");
+            add_indentation(html, indent);
+
+            APPEND_ARR(html, "<blockquote>");
+            APPEND_ARR(html, dom->text);
+            APPEND_ARR(html, "</blockquote>\n");
+
+            return html;
+        }
+        case HRule: {
+            string html = STR("");
+            add_indentation(html, indent);
+            APPEND_ARR(html, "<hr/>\n");
+
+            return html;
+        }
         case Paragraph: {
             string html = STR("");
             add_indentation(html, indent);
@@ -121,7 +138,7 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
                 // We check here if we have two TextElement besides, it should have a space between.
                 if (previous_child != NULL) {
                     if (previous_child->dom_el == TextElement) {
-                        APPEND_ARR(html, " ");
+                        APPEND_ARR(html, "");
                     }
                 } else {
                     add_indentation(html, indent + 1);
@@ -156,6 +173,58 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
             }
 
             APPEND_ARR(html, "</b>");
+
+            return html;
+        }
+        case Struck: {
+            string html = STR("<s>");
+
+            if (dom->children != NULL) {
+                string content = code_generation_from_dom(dom->children->dom, indent + 1); // Identation not relevant here
+
+                APPEND_STR(html, content);
+            }
+
+            APPEND_ARR(html, "</s>");
+
+            return html;
+        }
+        case Italic: {
+            string html = STR("<i>");
+
+            if (dom->children != NULL) {
+                string content = code_generation_from_dom(dom->children->dom, indent + 1); // Identation not relevant here
+
+                APPEND_STR(html, content);
+            }
+
+            APPEND_ARR(html, "</i>");
+
+            return html;
+        }
+        case InlineCode: {
+            string html = STR("<code>");
+
+            if (dom->children != NULL) {
+                string content = code_generation_from_dom(dom->children->dom, indent + 1); // Identation not relevant here
+
+                APPEND_STR(html, content);
+            }
+
+            APPEND_ARR(html, "</code>");
+
+            return html;
+        }
+        case BlockCode: {
+            string html = STR("<pre><code>");
+
+            if (dom->children != NULL) {
+                string content = code_generation_from_dom(dom->children->dom, indent + 1); // Identation not relevant here
+
+                APPEND_STR(html, content);
+            }
+
+            APPEND_ARR(html, "</code></pre>");
 
             return html;
         }

@@ -10,7 +10,24 @@
 
 ###### title6
 
+I'm a paragraph.
+This is another line.
+
 I am **bold**!
 
-I'm **abasc**
+I'm ~~struck~~
+
+I'm *italic*
+
+> This is a quote
+
+---
+
+----------
+
+I'm ‘Inline Code‘
+
+‘‘‘
+first line code
+‘‘‘
 

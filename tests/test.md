@@ -10,13 +10,16 @@
 
 ###### title6
 
+I'm a paragraph.
+This is another line.
+
 I am **bold**!
-I'm **abasc**
+
 I'm ~~abc~~
 
 I'm *abc*
 
-> abc Hello World
+> This is a quote
 
 ---
 
@@ -24,10 +27,6 @@ I'm *abc*
 
 I'm ‘Inline Code‘
 
-Paragraph after inline code
-
 ‘‘‘
 first line code
 ‘‘‘
-
-Paragraph after inline code
