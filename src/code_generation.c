@@ -34,7 +34,7 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
     switch (dom->dom_el) {
         case Document: {
             string html = STR("");
-            add_indentation(html, indent - 2);
+            add_indentation(html, indent);
 
             DomList *child = dom->children;
 
@@ -167,7 +167,7 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
 
 string code_generation(DOM* dom) {
     string final_code = STR(HTML_HEADER);
-    string dom_code = code_generation_from_dom(dom, 2);
+    string dom_code = code_generation_from_dom(dom, 0);
 
     APPEND_STR(final_code, dom_code);
     APPEND_ARR(final_code, HTML_FOOTER);
