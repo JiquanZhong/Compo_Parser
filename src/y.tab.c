@@ -557,10 +557,10 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   116,   116,   121,   125,   129,   133,   137,   142,   146,
-     148,   154,   157,   161,   162,   165,   175,   180,   182,   191,
-     194,   198,   202,   206,   210,   214,   218,   222,   226,   229,
-     231,   240,   244
+       0,   116,   116,   121,   125,   129,   133,   137,   143,   147,
+     150,   156,   160,   165,   166,   169,   179,   184,   187,   198,
+     201,   205,   209,   213,   217,   221,   225,   229,   233,   236,
+     238,   247,   251
 };
 #endif
 
@@ -1775,7 +1775,7 @@ yyreduce:
     break;
 
   case 8: /* line: text line  */
-#line 142 "src/parser.y"
+#line 143 "src/parser.y"
               {
         (yyval.dom_list) = (yyvsp[-1].dom_list);
         (yyval.dom_list)->next = (yyvsp[0].dom_list);
@@ -1784,13 +1784,13 @@ yyreduce:
     break;
 
   case 9: /* line: text  */
-#line 146 "src/parser.y"
+#line 147 "src/parser.y"
            { (yyval.dom_list) = (yyvsp[0].dom_list); }
 #line 1790 "src/y.tab.c"
     break;
 
   case 10: /* paragraph: line NEWLINE paragraph  */
-#line 148 "src/parser.y"
+#line 150 "src/parser.y"
                            {
         (yyval.dom_list) = (yyvsp[-2].dom_list);
         DomList* curr = (yyval.dom_list);
@@ -1801,33 +1801,33 @@ yyreduce:
     break;
 
   case 11: /* paragraph: line  */
-#line 154 "src/parser.y"
+#line 156 "src/parser.y"
            { (yyval.dom_list) = (yyvsp[0].dom_list); }
 #line 1807 "src/y.tab.c"
     break;
 
   case 12: /* svg_coord: NUMBER COMMA NUMBER  */
-#line 157 "src/parser.y"
-                                   {
+#line 160 "src/parser.y"
+                        {
     (yyval.svg_coord) = new_svg_coord((yyvsp[-2].number), (yyvsp[0].number));
-}
+    }
 #line 1815 "src/y.tab.c"
     break;
 
   case 13: /* svg_attribute: STR  */
-#line 161 "src/parser.y"
+#line 165 "src/parser.y"
         { (yyval.text) = (yyvsp[0].text); }
 #line 1821 "src/y.tab.c"
     break;
 
   case 14: /* svg_attribute: %empty  */
-#line 162 "src/parser.y"
+#line 166 "src/parser.y"
       { (yyval.text) = NULL; }
 #line 1827 "src/y.tab.c"
     break;
 
   case 15: /* svg_instruction: LINE svg_coord svg_coord svg_attribute  */
-#line 165 "src/parser.y"
+#line 169 "src/parser.y"
                                            {
         SvgCoordList* coords = new_svg_coord_list((yyvsp[-2].svg_coord));
         SvgCoordList* coord_next = new_svg_coord_list((yyvsp[-1].svg_coord));
@@ -1840,7 +1840,7 @@ yyreduce:
     break;
 
   case 16: /* svg_instruction_list: svg_instruction NEWLINE svg_instruction_list  */
-#line 175 "src/parser.y"
+#line 179 "src/parser.y"
                                                  {
         (yyval.svg_list) = new_svg_list((yyvsp[-2].svg));
 
@@ -1850,117 +1850,119 @@ yyreduce:
     break;
 
   case 17: /* svg_instruction_list: %empty  */
-#line 180 "src/parser.y"
+#line 184 "src/parser.y"
       { (yyval.svg_list) = NULL; }
 #line 1856 "src/y.tab.c"
     break;
 
   case 18: /* svg: SVG_BEGIN svg_coord COMMA svg_coord NEWLINE svg_instruction_list SVG_END  */
-#line 182 "src/parser.y"
-                                                                              {
+#line 187 "src/parser.y"
+                                                                             {
     (yyval.dom) = new_dom(SVG, NULL);
     (yyval.dom)->svg_children = (yyvsp[-1].svg_list);
+    (yyval.dom)->x_y = (yyvsp[-5].svg_coord);
+    (yyval.dom)->u_v = (yyvsp[-3].svg_coord);
     // You have to save somehow the dimensions within the two svg_coord
-}
-#line 1866 "src/y.tab.c"
+    }
+#line 1868 "src/y.tab.c"
     break;
 
   case 19: /* block: HRULE  */
-#line 191 "src/parser.y"
+#line 198 "src/parser.y"
          {
         (yyval.dom) = new_dom(HRule, NULL);
     }
-#line 1874 "src/y.tab.c"
+#line 1876 "src/y.tab.c"
     break;
 
   case 20: /* block: QUOTE TEXT  */
-#line 194 "src/parser.y"
+#line 201 "src/parser.y"
                 {
         (yyval.dom) = new_dom(Quote, NULL);
         (yyval.dom)->text = (yyvsp[0].text);
     }
-#line 1883 "src/y.tab.c"
+#line 1885 "src/y.tab.c"
     break;
 
   case 21: /* block: H1 TEXT  */
-#line 198 "src/parser.y"
+#line 205 "src/parser.y"
              {
         (yyval.dom) = new_dom(Header1, NULL);
         (yyval.dom)->text = (yyvsp[0].text);
     }
-#line 1892 "src/y.tab.c"
+#line 1894 "src/y.tab.c"
     break;
 
   case 22: /* block: H2 TEXT  */
-#line 202 "src/parser.y"
+#line 209 "src/parser.y"
             {
         (yyval.dom) = new_dom(Header2, NULL);
         (yyval.dom)->text = (yyvsp[0].text);
     }
-#line 1901 "src/y.tab.c"
+#line 1903 "src/y.tab.c"
     break;
 
   case 23: /* block: H3 TEXT  */
-#line 206 "src/parser.y"
+#line 213 "src/parser.y"
             {
         (yyval.dom) = new_dom(Header3, NULL);
         (yyval.dom)->text = (yyvsp[0].text);
     }
-#line 1910 "src/y.tab.c"
+#line 1912 "src/y.tab.c"
     break;
 
   case 24: /* block: H4 TEXT  */
-#line 210 "src/parser.y"
+#line 217 "src/parser.y"
             {
         (yyval.dom) = new_dom(Header4, NULL);
         (yyval.dom)->text = (yyvsp[0].text);
     }
-#line 1919 "src/y.tab.c"
+#line 1921 "src/y.tab.c"
     break;
 
   case 25: /* block: H5 TEXT  */
-#line 214 "src/parser.y"
+#line 221 "src/parser.y"
             {
         (yyval.dom) = new_dom(Header5, NULL);
         (yyval.dom)->text = (yyvsp[0].text);
     }
-#line 1928 "src/y.tab.c"
+#line 1930 "src/y.tab.c"
     break;
 
   case 26: /* block: H6 TEXT  */
-#line 218 "src/parser.y"
+#line 225 "src/parser.y"
             {
         (yyval.dom) = new_dom(Header6, NULL);
         (yyval.dom)->text = (yyvsp[0].text);
     }
-#line 1937 "src/y.tab.c"
+#line 1939 "src/y.tab.c"
     break;
 
   case 27: /* block: BLOCKCODE paragraph BLOCKCODE  */
-#line 222 "src/parser.y"
+#line 229 "src/parser.y"
                                   {
         DOM* par = new_dom(Paragraph, (yyvsp[-1].dom_list));
         (yyval.dom) = new_dom(BlockCode, new_dom_list(par));
     }
-#line 1946 "src/y.tab.c"
+#line 1948 "src/y.tab.c"
     break;
 
   case 28: /* block: paragraph  */
-#line 226 "src/parser.y"
+#line 233 "src/parser.y"
                 {
         (yyval.dom) = new_dom(Paragraph, (yyvsp[0].dom_list));
     }
-#line 1954 "src/y.tab.c"
+#line 1956 "src/y.tab.c"
     break;
 
   case 29: /* block: svg  */
-#line 229 "src/parser.y"
+#line 236 "src/parser.y"
           { (yyval.dom) = (yyvsp[0].dom); }
-#line 1960 "src/y.tab.c"
+#line 1962 "src/y.tab.c"
     break;
 
   case 30: /* block_list: block BLANK_LINE block_list  */
-#line 231 "src/parser.y"
+#line 238 "src/parser.y"
                                 {
         if ((yyvsp[-2].dom) == NULL) {
             (yyval.dom_list) = (yyvsp[0].dom_list);
@@ -1970,28 +1972,28 @@ yyreduce:
             (yyval.dom_list)->next = (yyvsp[0].dom_list);
         }
     }
-#line 1974 "src/y.tab.c"
+#line 1976 "src/y.tab.c"
     break;
 
   case 31: /* block_list: block  */
-#line 240 "src/parser.y"
+#line 247 "src/parser.y"
             {
         (yyval.dom_list) = new_dom_list((yyvsp[0].dom));
     }
-#line 1982 "src/y.tab.c"
+#line 1984 "src/y.tab.c"
     break;
 
   case 32: /* document: block_list  */
-#line 244 "src/parser.y"
+#line 251 "src/parser.y"
                      {
     dom_root = (yyval.dom) = new_dom(Document, (yyvsp[0].dom_list));
     YYACCEPT;
 }
-#line 1991 "src/y.tab.c"
+#line 1993 "src/y.tab.c"
     break;
 
 
-#line 1995 "src/y.tab.c"
+#line 1997 "src/y.tab.c"
 
         default: break;
       }
@@ -2226,7 +2228,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 249 "src/parser.y"
+#line 256 "src/parser.y"
 
 
 /*********** C CODE (YOU DO NOT HAVE TO MODIFY IT) ******************/

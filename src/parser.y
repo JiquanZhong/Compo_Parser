@@ -138,12 +138,14 @@ text:
         DOM* dom = new_dom(InlineCode, $2);
         $$ = new_dom_list(dom);
     };
+
 line:
     text line {
         $$ = $1;
         $$->next = $2;
     }
     | text { $$ = $1; };
+
 paragraph:
     line NEWLINE paragraph {
         $$ = $1;
@@ -154,9 +156,11 @@ paragraph:
     | line { $$ = $1; }
     ;
 
-    svg_coord: NUMBER COMMA NUMBER {
+svg_coord: 
+    NUMBER COMMA NUMBER {
     $$ = new_svg_coord($1, $3);
-};
+    };
+
 svg_attribute:
     STR { $$ = $1; }
     | { $$ = NULL; };
@@ -179,11 +183,14 @@ svg_instruction_list:
     }
     | { $$ = NULL; };
 
-svg: SVG_BEGIN svg_coord COMMA svg_coord NEWLINE svg_instruction_list SVG_END {
+svg: 
+    SVG_BEGIN svg_coord COMMA svg_coord NEWLINE svg_instruction_list SVG_END {
     $$ = new_dom(SVG, NULL);
     $$->svg_children = $6;
+    $$->x_y = $2;
+    $$->u_v = $4;
     // You have to save somehow the dimensions within the two svg_coord
-};
+    };
 
 
 

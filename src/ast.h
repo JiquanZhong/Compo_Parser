@@ -63,6 +63,7 @@ typedef struct svg_inst {
     char* color_stroke; // The color stroke paremeter. NULL if not defined.
     char* color_fill; // The color fill parameter. NULL if not defined.
 } SvgInst;
+
 typedef struct svg_list {
     SvgInst* svg; // An object containing an svg instruction.
     struct svg_list* next; // A reference to the next element of the list or NULL if it is the last element.
@@ -74,6 +75,8 @@ typedef struct dom {
     SvgList* svg_children; // A reference to the first element of a list of svg instructions. NULL if no children.
     char* text; // A text parameter that can be used for TextElement, Header, Link and Image elements. NULL if not needed.
     char* url; // A url parameter that can be used for Link and Image elements. NULL if not needed.
+    struct svg_coord* x_y; //The first two coordinates of the canvas in SVG mode
+    struct svg_coord* u_v; //The last two coordinates of the canvas in SVG mode
 } DOM;
 
 typedef struct dom_list {

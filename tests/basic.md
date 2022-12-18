@@ -33,5 +33,5 @@ second line code
 ```
 
 ```xsvg:0,0,100,100 
-line 0,0 100,100 red 
+line 0,0 100,100 blue 
 ```

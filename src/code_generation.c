@@ -1,4 +1,5 @@
 #include "ast.h"
+#include "stdio.h"
 
 #define SIMPLE_STRINGS_IMPL
 #include "simple_strings.h"
@@ -22,6 +23,55 @@ const char HTML_FOOTER[] = 	"  </article>\n"
 void add_indentation(string str, unsigned int indent_lvl) {
     for (int t = 0; t < indent_lvl; t++) {
         APPEND_ARR(str, "  ");
+    }
+}
+
+#include <stdio.h>
+#include <stdlib.h>
+
+char* itoa(int val){
+    if(val == 0){return STR("0");}
+	static char buf[32] = {0};
+	int i = 30;
+	for(; val && i ; --i, val /= 10)
+		buf[i] = "0123456789abcdef"[val % 10];
+	return &buf[i+1];
+}
+
+string code_generation_from_svg(SvgList* svg_list){
+    SvgInst* svg = svg_list->svg;
+    switch(svg->kind) {
+        case Line: {
+            string html = STR("    <line ");
+            
+            //0,0
+            //获取了坐标链表的根结点
+            SvgCoordList* coords_list = svg->coords;
+            //获取坐标对象
+            SvgCoord* coord = coords_list->coord;
+            APPEND_ARR(html,"x1=\"");
+            APPEND_ARR(html,itoa(coord->x));
+            APPEND_ARR(html,"\" y1=\"");
+            APPEND_ARR(html,itoa(coord->y));
+            APPEND_ARR(html,"\" x2=\"");
+
+            //get 100,100
+            coords_list = coords_list->next;
+            coord = coords_list->coord;
+            APPEND_ARR(html,itoa(coord->x));
+            APPEND_ARR(html,"\" y2=\"");
+            APPEND_ARR(html,itoa(coord->y));
+
+            //add color
+            APPEND_ARR(html,"\" stroke=\"");
+            APPEND_ARR(html,svg->color_stroke);
+            APPEND_ARR(html,"\"/>\n");
+
+            return html;
+        }
+        default: {
+            return STR("");
+        }
     }
 }
 
@@ -229,16 +279,30 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
             return html;
         }
         case SVG: {
-            string html = STR("  <svg viewBox=");
-            if (dom->children != NULL) {
-                string content = code_generation_from_dom(dom->children->dom, indent); // Identation not relevant here
+            string html = STR("  <svg viewBox=\"");
+            APPEND_ARR(html,itoa(dom->x_y->x));
+            APPEND_ARR(html," ");
+            APPEND_ARR(html,itoa(dom->x_y->y));
+            APPEND_ARR(html," ");
+            APPEND_ARR(html,itoa(dom->u_v->x));
+            APPEND_ARR(html," ");
+            APPEND_ARR(html,itoa(dom->u_v->y));
+            APPEND_ARR(html,"\">\n");
 
-                APPEND_STR(html, content);
+
+            SvgList *svg_children = dom->svg_children;
+
+            while (svg_children != NULL) {
+                string child_html = code_generation_from_svg(svg_children);
+
+                APPEND_STR(html, child_html);
+
+                svg_children = svg_children->next;
             }
-            APPEND_ARR(html, "/svg>\n");
+            
+            APPEND_ARR(html, "  </svg>\n");
             return html;
         }
-
         default: {
             return STR("");
         }
