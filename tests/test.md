@@ -25,8 +25,13 @@ I'm *abc*
 
 ---------
 
-I'm ‘Inline Code‘
+I'm `Inline Code`
 
-‘‘‘
+```
 first line code
-‘‘‘
+second line code
+```
+
+```xsvg:0,0,100,100 
+line 0,0 100,100 red 
+```

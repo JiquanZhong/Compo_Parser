@@ -80,8 +80,10 @@ bold "**"
 underline "__"
 struck "~~"
 italic "*"
-blockcode "‘‘‘"
-inlinecode "‘"
+blockcodestart "```\n"
+blockcodeend "\n```"
+blockcode "```"
+inlinecode "`"
 hrule "---"[-]*
 quote ">"[[:blank:]]*
 h6 "######"[[:blank:]]*
@@ -91,11 +93,11 @@ h3 "###"[[:blank:]]*
 h2 "##"[[:blank:]]*
 h1 "#"[[:blank:]]*
 
-%x BOLD_MODE TEXT_MODE UNDERLINE_MODE STRUCK_MODE ITALIC_MODE BLOCK_CODE_MODE INLINE_CODE_MODE
+%x BOLD_MODE TEXT_MODE UNDERLINE_MODE STRUCK_MODE ITALIC_MODE BLOCK_CODE_MODE INLINE_CODE_MODE SVG_MODE
 
 %%
 
-<INITIAL>[[:blank:]]*{newline} {
+<INITIAL,BLOCK_CODE_MODE,SVG_MODE>[[:blank:]]*{newline} {
     return NEWLINE;
 };
 
@@ -159,7 +161,7 @@ h1 "#"[[:blank:]]*
     return ITALIC;
 };
 
-<INITIAL>{blockcode}	{
+<INITIAL>{blockcodestart}	{
     BEGIN_MODE(BLOCK_CODE_MODE); // You can switch to another mode
 
     return BLOCKCODE;
@@ -191,8 +193,7 @@ h1 "#"[[:blank:]]*
     return ITALIC;
 };
 
-
-<BLOCK_CODE_MODE>{blockcode} {
+<BLOCK_CODE_MODE>{blockcodeend} {
     END_MODE; // It will go back to the previous mode
     return BLOCKCODE;
 };
@@ -233,8 +234,39 @@ h1 "#"[[:blank:]]*
     strbufapp(*yytext);
 }
 
+{blockcode}"xsvg:" {
+    BEGIN_MODE(SVG_MODE);
 
-<TEXT_MODE>({newline}|{bold}|{underline}|{struck}|{italic}|{blockcode}|{inlinecode}|^{hrule}|^{quote}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
+    return SVG_BEGIN;
+};
+
+<SVG_MODE>{blockcode} {
+    END_MODE;
+
+    return SVG_END;
+};
+
+<SVG_MODE>"," {
+    return COMMA;
+};
+
+<SVG_MODE>-?[[:digit:]]+ {
+    yylval.number = atoi(yytext);
+
+    return NUMBER;
+};
+
+<SVG_MODE>^"line" {
+    return LINE;
+};
+
+<SVG_MODE>([[:alnum:]]|"#")+ {
+    char* yytextcpy = malloc(strlen(yytext) + 1);
+    yylval.text = strcpy(yytextcpy, yytext);
+    return STR;
+};
+
+<TEXT_MODE>({newline}|{bold}|{underline}|{struck}|{italic}|{blockcodeend}|{inlinecode}|^{hrule}|^{quote}|^{h1}|^{h2}|^{h3}|^{h4}|^{h5}|^{h6})(.|\n)* {
     END_MODE;
 
     // We give the full capture to Flex to be analyzed again

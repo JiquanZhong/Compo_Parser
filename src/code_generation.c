@@ -129,7 +129,7 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
             string html = STR("");
             add_indentation(html, indent);
 
-            APPEND_ARR(html, "<p>\n");
+            APPEND_ARR(html, "<p>");
 
             DomList *child = dom->children;
             DOM *previous_child = NULL;
@@ -152,7 +152,7 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
                 child = child->next;
             }
 
-            APPEND_ARR(html, "\n");
+            // APPEND_ARR(html, "\n");
             add_indentation(html, indent);
             APPEND_ARR(html, "</p>\n");
 
@@ -160,7 +160,7 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
         }
         case TextElement: {
             string html = STR(dom->text);
-
+            // APPEND_STR(html,"\n");
             return html;
         }
         case Bold: {
@@ -216,18 +216,29 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
             return html;
         }
         case BlockCode: {
-            string html = STR("<pre><code>");
+            string html = STR("  <pre><code>");
 
             if (dom->children != NULL) {
-                string content = code_generation_from_dom(dom->children->dom, indent + 1); // Identation not relevant here
+                string content = code_generation_from_dom(dom->children->dom, indent); // Identation not relevant here
 
                 APPEND_STR(html, content);
             }
 
-            APPEND_ARR(html, "</code></pre>");
+            APPEND_ARR(html, "  </code></pre>\n");
 
             return html;
         }
+        case SVG: {
+            string html = STR("  <svg viewBox=");
+            if (dom->children != NULL) {
+                string content = code_generation_from_dom(dom->children->dom, indent); // Identation not relevant here
+
+                APPEND_STR(html, content);
+            }
+            APPEND_ARR(html, "/svg>\n");
+            return html;
+        }
+
         default: {
             return STR("");
         }

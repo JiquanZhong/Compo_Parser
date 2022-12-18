@@ -25,9 +25,13 @@ I'm *italic*
 
 ----------
 
-I'm ‘Inline Code‘
+I'm `Inline code`
 
-‘‘‘
+```
 first line code
-‘‘‘
+second line code
+```
 
+```xsvg:0,0,100,100 
+line 0,0 100,100 red 
+```

@@ -70,7 +70,13 @@ extern int yydebug;
     H3 = 271,                      /* H3  */
     H2 = 272,                      /* H2  */
     H1 = 273,                      /* H1  */
-    TEXT = 274                     /* TEXT  */
+    TEXT = 274,                    /* TEXT  */
+    SVG_BEGIN = 275,               /* SVG_BEGIN  */
+    SVG_END = 276,                 /* SVG_END  */
+    COMMA = 277,                   /* COMMA  */
+    LINE = 278,                    /* LINE  */
+    STR = 279,                     /* STR  */
+    NUMBER = 280                   /* NUMBER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -90,7 +96,7 @@ union YYSTYPE
     SvgInst* svg;
     SvgList* svg_list;
 
-#line 94 "src/y.tab.h"
+#line 100 "src/y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -97,8 +97,17 @@ DOM* dom_root = NULL;
 %token H1
 %token <text> TEXT
 
-%type <dom> document block
+%token SVG_BEGIN SVG_END COMMA LINE
+%token <text> STR
+%token <number> NUMBER
+
+%type <dom> document block svg
 %type <dom_list> block_list paragraph line text
+%type <svg_coord> svg_coord
+%type <svg_coord_list> svg_coord_list
+%type <svg> svg_instruction
+%type <svg_list> svg_instruction_list
+%type <text> svg_attribute
 %start document
 
 %%
@@ -125,10 +134,6 @@ text:
         DOM* dom = new_dom(Italic, $2);
         $$ = new_dom_list(dom);
     }
-    | BLOCKCODE text BLOCKCODE{
-        DOM* dom = new_dom(BlockCode, $2);
-        $$ = new_dom_list(dom);
-    }
     | INLINECODE text INLINECODE{
         DOM* dom = new_dom(InlineCode, $2);
         $$ = new_dom_list(dom);
@@ -148,6 +153,40 @@ paragraph:
     }
     | line { $$ = $1; }
     ;
+
+    svg_coord: NUMBER COMMA NUMBER {
+    $$ = new_svg_coord($1, $3);
+};
+svg_attribute:
+    STR { $$ = $1; }
+    | { $$ = NULL; };
+
+svg_instruction:
+    LINE svg_coord svg_coord svg_attribute {
+        SvgCoordList* coords = new_svg_coord_list($2);
+        SvgCoordList* coord_next = new_svg_coord_list($3);
+        coords->next = coord_next;
+        $$ = new_svg_inst(Line, coords);
+
+        $$->color_stroke = $4;
+    };
+
+svg_instruction_list:
+    svg_instruction NEWLINE svg_instruction_list {
+        $$ = new_svg_list($1);
+
+        $$->next = $3;
+    }
+    | { $$ = NULL; };
+
+svg: SVG_BEGIN svg_coord COMMA svg_coord NEWLINE svg_instruction_list SVG_END {
+    $$ = new_dom(SVG, NULL);
+    $$->svg_children = $6;
+    // You have to save somehow the dimensions within the two svg_coord
+};
+
+
+
 block:
     HRULE{
         $$ = new_dom(HRule, NULL);
@@ -180,9 +219,14 @@ block:
         $$ = new_dom(Header6, NULL);
         $$->text = $2;
     }
+    |BLOCKCODE paragraph BLOCKCODE{
+        DOM* par = new_dom(Paragraph, $2);
+        $$ = new_dom(BlockCode, new_dom_list(par));
+    }
     | paragraph {
         $$ = new_dom(Paragraph, $1);
     };
+    | svg { $$ = $1; };
 block_list:
     block BLANK_LINE block_list {
         if ($1 == NULL) {
