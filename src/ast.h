@@ -58,6 +58,7 @@ typedef struct svg_inst {
     SvgCoordList* coords; // A reference to the first element of a list of coordinates. NULL if no coordinates needed.
     int width; // The width parameter of the command. -1 by default.
     int height; // The height parameter of the command. -1 by default.
+    int rayon; // The rayon parameter of the command. -1 by default.
     char* text; // The text used in the TEXT svg command. NULL for the other commands.
     char* anchor; // The anchor parameter in the TEXT svg command. NULL for the other commands.
     char* color_stroke; // The color stroke paremeter. NULL if not defined.

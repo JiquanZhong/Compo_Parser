@@ -98,6 +98,7 @@ DOM* dom_root = NULL;
 %token <text> TEXT
 
 %token SVG_BEGIN SVG_END COMMA LINE
+%token POLYLINE CIRCLE ELLIPSE RECT
 %token <text> STR
 %token <number> NUMBER
 
@@ -173,7 +174,43 @@ svg_instruction:
         $$ = new_svg_inst(Line, coords);
 
         $$->color_stroke = $4;
-    };
+    }| POLYLINE svg_coord svg_coord svg_coord svg_attribute{
+        SvgCoordList* coord_1 = new_svg_coord_list($2);
+        SvgCoordList* coord_2 = new_svg_coord_list($3);
+        SvgCoordList* coord_3 = new_svg_coord_list($4);
+        coord_1->next = coord_2;
+        coord_2->next = coord_3;
+
+        $$ = new_svg_inst(Polyline, coord_1);
+
+        $$->color_stroke = $4;
+    }| POLYLINE svg_coord svg_coord svg_coord svg_attribute svg_attribute{
+        SvgCoordList* coord_1 = new_svg_coord_list($2);
+        SvgCoordList* coord_2 = new_svg_coord_list($3);
+        SvgCoordList* coord_3 = new_svg_coord_list($4);
+        coord_1->next = coord_2;
+        coord_2->next = coord_3;
+        $$ = new_svg_inst(Polyline, coord_1);
+
+        $$->color_fill = $5;
+        $$->color_stroke = $6;
+    }| CIRCLE svg_coord NUMBER svg_attribute svg_attribute{
+        SvgCoordList* coord = new_svg_coord_list($2);
+        $$ = new_svg_inst(Circle, coord);
+
+        $$->rayon = $3;
+        $$->color_fill = $4;
+        $$->color_stroke = $5;
+    }| ELLIPSE svg_coord NUMBER NUMBER svg_attribute svg_attribute{
+        SvgCoordList* coord = new_svg_coord_list($2);
+        $$ = new_svg_inst(Ellipse, coord);
+
+        $$->width = $3;
+        $$->height = $4;
+        $$->color_fill = $5;
+        $$->color_fill = $6;
+    }
+    ;
 
 svg_instruction_list:
     svg_instruction NEWLINE svg_instruction_list {
@@ -272,6 +309,7 @@ void svg_display(SvgInst* svg, int depth) {
     printf("]");
     printf(" w=%d", svg->width);
     printf(" h=%d", svg->height);
+    printf(" r=%d", svg->rayon);
     if (svg->text != NULL) printf(" \"%s\"", svg->text);
     if (svg->anchor != NULL) printf(" anchor=%s", svg->anchor);
     if (svg->color_stroke != NULL) printf(" cs=%s", svg->color_stroke);

@@ -260,6 +260,26 @@ h1 "#"[[:blank:]]*
     return LINE;
 };
 
+<SVG_MODE>^"polyline" {
+    return POLYLINE;
+};
+
+<SVG_MODE>^"circle" {
+    return CIRCLE;
+};
+
+<SVG_MODE>^"ellipse" {
+    return ELLIPSE;
+};
+
+<SVG_MODE>^"rect" {
+    return RECT;
+};
+
+<SVG_MODE>^"text" {
+    return TEXT;
+};
+
 <SVG_MODE>([[:alnum:]]|"#")+ {
     char* yytextcpy = malloc(strlen(yytext) + 1);
     yylval.text = strcpy(yytextcpy, yytext);

@@ -38,6 +38,26 @@ char* itoa(int val){
 	return &buf[i+1];
 }
 
+string stroke_html(SvgInst* svg){
+    string html = STR("");
+    if(svg->color_stroke != NULL){
+        html = STR("stroke=\"");
+        APPEND_ARR(html,svg->color_stroke);
+        APPEND_ARR(html,"\"/> ");
+    }
+    return html;
+}
+
+string fill_html(SvgInst* svg){
+    string html = STR("");
+    if(svg->color_stroke != NULL){
+        html = STR("fill=\"");
+        APPEND_ARR(html,svg->color_fill);
+        APPEND_ARR(html,"\"/> ");
+    }
+    return html;
+}
+
 string code_generation_from_svg(SvgList* svg_list){
     SvgInst* svg = svg_list->svg;
     switch(svg->kind) {
@@ -61,11 +81,11 @@ string code_generation_from_svg(SvgList* svg_list){
             APPEND_ARR(html,itoa(coord->x));
             APPEND_ARR(html,"\" y2=\"");
             APPEND_ARR(html,itoa(coord->y));
+            APPEND_ARR(html,"\" ");
 
-            //add color
-            APPEND_ARR(html,"\" stroke=\"");
-            APPEND_ARR(html,svg->color_stroke);
-            APPEND_ARR(html,"\"/>\n");
+
+            APPEND_ARR(html,stroke_html(svg));
+            APPEND_ARR(html,"\n");
 
             return html;
         }

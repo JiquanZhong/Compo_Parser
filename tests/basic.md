@@ -35,3 +35,19 @@ second line code
 ```xsvg:0,0,100,100 
 line 0,0 100,100 blue 
 ```
+
+```xsvg:0,0,20,20 
+polyline 0,0 20,0 0,20 red black
+```
+
+```xsvg:0,0,20,20 
+polyline 0,0 20,0 0,20 red
+```
+
+```xsvg:0,0,100,100 
+circle 50,50 50 red blue
+```
+
+```xsvg:0,0,100,100 
+ellipse 50,50 50 20 red black
+```
