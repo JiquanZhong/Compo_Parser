@@ -43,17 +43,17 @@ string stroke_html(SvgInst* svg){
     if(svg->color_stroke != NULL){
         html = STR("stroke=\"");
         APPEND_ARR(html,svg->color_stroke);
-        APPEND_ARR(html,"\"/> ");
+        APPEND_ARR(html,"\"");
     }
     return html;
 }
 
 string fill_html(SvgInst* svg){
     string html = STR("");
-    if(svg->color_stroke != NULL){
+    if(svg->color_fill != NULL){
         html = STR("fill=\"");
         APPEND_ARR(html,svg->color_fill);
-        APPEND_ARR(html,"\"/> ");
+        APPEND_ARR(html,"\" ");
     }
     return html;
 }
@@ -63,7 +63,6 @@ string code_generation_from_svg(SvgList* svg_list){
     switch(svg->kind) {
         case Line: {
             string html = STR("    <line ");
-            
             //0,0
             //获取了坐标链表的根结点
             SvgCoordList* coords_list = svg->coords;
@@ -85,8 +84,97 @@ string code_generation_from_svg(SvgList* svg_list){
 
 
             APPEND_ARR(html,stroke_html(svg));
-            APPEND_ARR(html,"\n");
+            APPEND_ARR(html,"/>\n");
 
+            return html;
+        }
+        case Polyline: {
+            string html = STR("    <polyline points=\"");
+            SvgCoordList* coords_list = svg->coords;
+
+            while(coords_list != NULL){
+            SvgCoord* coord = coords_list->coord;
+            APPEND_ARR(html,itoa(coord->x));
+            APPEND_ARR(html,",");
+            APPEND_ARR(html,itoa(coord->y));
+            if(coords_list ->next != NULL){
+                APPEND_ARR(html," ");
+            }
+            coords_list = coords_list->next;
+            }
+            
+            APPEND_ARR(html,"\" ");
+            APPEND_ARR(html,fill_html(svg));
+            APPEND_ARR(html,stroke_html(svg));
+            APPEND_ARR(html,"/> ");
+            APPEND_ARR(html,"\n");
+            return html;
+        }
+        case Circle: {
+            string html = STR("    <circle cx=\"");
+            SvgCoordList* coords_list = svg->coords;
+            SvgCoord* coord = coords_list->coord;
+            APPEND_ARR(html,itoa(coord->x));
+            APPEND_ARR(html,"\" cy=\"");
+            APPEND_ARR(html,itoa(coord->y));
+            APPEND_ARR(html,"\" r=\"");
+            APPEND_ARR(html,itoa(svg->rayon));
+            APPEND_ARR(html,"\" ");
+            APPEND_ARR(html,fill_html(svg));
+            APPEND_ARR(html,stroke_html(svg));
+            APPEND_ARR(html,"/> ");
+            APPEND_ARR(html,"\n");
+            return html;
+        }
+        case Ellipse: {
+            string html = STR("    <ellipse cx=\"");
+            SvgCoordList* coords_list = svg->coords;
+            SvgCoord* coord = coords_list->coord;
+            APPEND_ARR(html,itoa(coord->x));
+            APPEND_ARR(html,"\" cy=\"");
+            APPEND_ARR(html,itoa(coord->y));
+            APPEND_ARR(html,"\" rx=\"");
+            APPEND_ARR(html,itoa(svg->width));
+            APPEND_ARR(html,"\" ry=\"");
+            APPEND_ARR(html,itoa(svg->height));
+            APPEND_ARR(html,"\" ");
+            APPEND_ARR(html,fill_html(svg));
+            APPEND_ARR(html,stroke_html(svg));
+            APPEND_ARR(html,"/> ");
+            APPEND_ARR(html,"\n");
+            return html;
+        }
+        case Rect: {
+            string html = STR("    <rect x=\"");
+            SvgCoordList* coords_list = svg->coords;
+            SvgCoord* coord = coords_list->coord;
+            APPEND_ARR(html,itoa(coord->x));
+            APPEND_ARR(html,"\" y=\"");
+            APPEND_ARR(html,itoa(coord->y));
+            APPEND_ARR(html,"\" width=\"");
+            APPEND_ARR(html,itoa(svg->width));
+            APPEND_ARR(html,"\" height=\"");
+            APPEND_ARR(html,itoa(svg->height));
+            APPEND_ARR(html,"\" ");
+            APPEND_ARR(html,fill_html(svg));
+            APPEND_ARR(html,stroke_html(svg));
+            APPEND_ARR(html,"/> ");
+            APPEND_ARR(html,"\n");
+            return html;
+        }
+        case Text: {
+            string html = STR("    <text x=\"");
+            SvgCoordList* coords_list = svg->coords;
+            SvgCoord* coord = coords_list->coord;
+            APPEND_ARR(html,itoa(coord->x));
+            APPEND_ARR(html,"\" y=\"");
+            APPEND_ARR(html,itoa(coord->y));
+            APPEND_ARR(html,"\" ");
+            APPEND_ARR(html,fill_html(svg));
+            APPEND_ARR(html,">");
+
+            APPEND_ARR(html,svg->text);
+            APPEND_ARR(html,"</text>\n");
             return html;
         }
         default: {

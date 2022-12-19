@@ -98,7 +98,7 @@ DOM* dom_root = NULL;
 %token <text> TEXT
 
 %token SVG_BEGIN SVG_END COMMA LINE
-%token POLYLINE CIRCLE ELLIPSE RECT
+%token POLYLINE CIRCLE ELLIPSE RECT TEXT
 %token <text> STR
 %token <number> NUMBER
 
@@ -174,16 +174,6 @@ svg_instruction:
         $$ = new_svg_inst(Line, coords);
 
         $$->color_stroke = $4;
-    }| POLYLINE svg_coord svg_coord svg_coord svg_attribute{
-        SvgCoordList* coord_1 = new_svg_coord_list($2);
-        SvgCoordList* coord_2 = new_svg_coord_list($3);
-        SvgCoordList* coord_3 = new_svg_coord_list($4);
-        coord_1->next = coord_2;
-        coord_2->next = coord_3;
-
-        $$ = new_svg_inst(Polyline, coord_1);
-
-        $$->color_stroke = $4;
     }| POLYLINE svg_coord svg_coord svg_coord svg_attribute svg_attribute{
         SvgCoordList* coord_1 = new_svg_coord_list($2);
         SvgCoordList* coord_2 = new_svg_coord_list($3);
@@ -208,7 +198,21 @@ svg_instruction:
         $$->width = $3;
         $$->height = $4;
         $$->color_fill = $5;
-        $$->color_fill = $6;
+        $$->color_stroke = $6;
+    }| RECT svg_coord NUMBER NUMBER svg_attribute svg_attribute{
+        SvgCoordList* coord = new_svg_coord_list($2);
+        $$ = new_svg_inst(Rect, coord);
+
+        $$->width = $3;
+        $$->height = $4;
+        $$->color_fill = $5;
+        $$->color_stroke = $6;
+    }| TEXT svg_coord STR svg_attribute{
+        SvgCoordList* coord = new_svg_coord_list($2);
+        $$ = new_svg_inst(Text, coord);
+
+        $$->text = $3;
+        $$->color_fill = $4;    
     }
     ;
 
