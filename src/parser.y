@@ -154,8 +154,7 @@ paragraph:
         while (curr->next != NULL) curr = curr->next;
         curr->next = $3;
     }
-    | line { $$ = $1; }
-    ;
+    | line { $$ = $1; };
 
 svg_coord: 
     NUMBER COMMA NUMBER {
@@ -268,12 +267,13 @@ block:
         $$->text = $2;
     }
     |BLOCKCODE paragraph BLOCKCODE{
-        DOM* par = new_dom(Paragraph, $2);
-        $$ = new_dom(BlockCode, new_dom_list(par));
+        DOM* code_par = new_dom(Paragraph, $2);
+        code_par->block_code_mode = 1;
+        $$ = new_dom(BlockCode, new_dom_list(code_par));
     }
     | paragraph {
         $$ = new_dom(Paragraph, $1);
-    };
+    }
     | svg { $$ = $1; };
 block_list:
     block BLANK_LINE block_list {

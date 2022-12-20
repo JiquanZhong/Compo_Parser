@@ -78,6 +78,7 @@ typedef struct dom {
     char* url; // A url parameter that can be used for Link and Image elements. NULL if not needed.
     struct svg_coord* x_y; //The first two coordinates of the canvas in SVG mode
     struct svg_coord* u_v; //The last two coordinates of the canvas in SVG mode
+    int block_code_mode;
 } DOM;
 
 typedef struct dom_list {

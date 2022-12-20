@@ -285,34 +285,48 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
         }
         case Paragraph: {
             string html = STR("");
-            add_indentation(html, indent);
+            if(dom->block_code_mode == 0){
+                add_indentation(html, indent);
+                APPEND_ARR(html, "<p>");
 
-            APPEND_ARR(html, "<p>");
+                DomList *child = dom->children;
+                DOM *previous_child = NULL;
 
-            DomList *child = dom->children;
-            DOM *previous_child = NULL;
-
-            while (child != NULL) {
-                // We check here if we have two TextElement besides, it should have a space between.
-                if (previous_child != NULL) {
-                    if (previous_child->dom_el == TextElement) {
-                        APPEND_ARR(html, "");
+                while (child != NULL) {
+                    // We check here if we have two TextElement besides, it should have a space between.
+                    if (previous_child != NULL) {
+                        if (previous_child->dom_el == TextElement) {
+                            if(child->dom->dom_el == TextElement){APPEND_ARR(html, "<br/>");}
+                            APPEND_ARR(html, "");
+                        }
+                    } else {
+                        add_indentation(html, indent + 1);
                     }
-                } else {
-                    add_indentation(html, indent + 1);
-                }
 
-                string content = code_generation_from_dom(child->dom, indent + 1); // Indentation not relevant here
+                    string content = code_generation_from_dom(child->dom, indent + 1); // Indentation not relevant here
 
-                APPEND_STR(html, content);
+                    APPEND_STR(html, content);
+                    if(child->next != NULL) APPEND_STR(html, STR(" "));
 
-                previous_child = child->dom;
-                child = child->next;
+                    previous_child = child->dom;
+                    child = child->next;
+                }            
+                // APPEND_ARR(html, "\n");
+                add_indentation(html, indent);
+                APPEND_ARR(html, "</p>\n");
+            }else{
+                DomList *child = dom->children;
+                DOM *previous_child = NULL;
+                while (child != NULL) {
+                    string content = code_generation_from_dom(child->dom, indent + 1); // Indentation not relevant here
+
+                    APPEND_STR(html, content);
+                    if(child->next != NULL) APPEND_STR(html, STR("\n"));
+                    previous_child = child->dom;
+                    child = child->next;
+
+                }  
             }
-
-            // APPEND_ARR(html, "\n");
-            add_indentation(html, indent);
-            APPEND_ARR(html, "</p>\n");
 
             return html;
         }
@@ -374,7 +388,7 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
             return html;
         }
         case BlockCode: {
-            string html = STR("  <pre><code>");
+            string html = STR("<pre><code>");
 
             if (dom->children != NULL) {
                 string content = code_generation_from_dom(dom->children->dom, indent); // Identation not relevant here
@@ -382,7 +396,7 @@ string code_generation_from_dom(DOM* dom, unsigned int indent) {
                 APPEND_STR(html, content);
             }
 
-            APPEND_ARR(html, "  </code></pre>\n");
+            APPEND_ARR(html, "</code></pre>\n");
 
             return html;
         }

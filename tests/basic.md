@@ -11,7 +11,8 @@
 ###### title6
 
 I'm a paragraph.
-This is another line.
+It's second line
+It's third line
 
 I am **bold**!
 
@@ -29,6 +30,8 @@ I'm `Inline code`
 
 ```
 first line code
+second line code
+third line code
 ```
 
 ```xsvg:0,0,100,100 
