@@ -20,11 +20,11 @@ How to run the program:
 
   In linux or windows,
 
-   `    gcc $(if $(DEBUG),-g) -lql -o out/compo src/lex.yy.c src/y.tab.c src/ast.c src/code_generation.c` 
+  `gcc $(if $(DEBUG),-g) -lql -o out/compo src/lex.yy.c src/y.tab.c src/ast.c src/code_generation.c` 
 
   In MacOS
 
-   `    gcc $(if $(DEBUG),-g) -ll -o out/compo src/lex.yy.c src/y.tab.c src/ast.c src/code_generation.c`
+  `gcc $(if $(DEBUG),-g) -ll -o out/compo src/lex.yy.c src/y.tab.c src/ast.c src/code_generation.c`
 
 5. Run `./out/compo tests/basic.md` basic.md is my testing markdown. The output html will be found in /out/result.html 
 
