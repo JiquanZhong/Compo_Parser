@@ -33,7 +33,7 @@
 document -> block_list
 
 block_list -> block BLANK_LINE block_list
-	     | block
+	    | block
 
 block -> HRULE
        | QUOTE TEXT
@@ -48,10 +48,10 @@ block -> HRULE
        | svg
 
 Paragraph -> line NEWLINE paragraph 
-		| line
+	   | line
 
 Line -> text line
-	| text
+      | text
 
 text -> TEXT
       | BOLD text BOLD
@@ -64,7 +64,8 @@ For the SVG part, the definition of grammar is as follos:
 
 Svg -> SVG_BEGIN svg_coord COMMA svg_coord NEWLINE svg_instruction_list SVG_END
 
-svg_instruction_list -> svg_instruction NEWLINE svg_instruction_list | ε
+svg_instruction_list -> svg_instruction NEWLINE svg_instruction_list 
+		      | ε
 
 svg_instruction -> LINE svg_coord svg_coord svg_attribute
                  | POLYLINE svg_coord svg_coord svg_coord svg_attribute svg_attribute
@@ -73,7 +74,8 @@ svg_instruction -> LINE svg_coord svg_coord svg_attribute
                  | RECT svg_coord NUMBER NUMBER svg_attribute svg_attribute
                  | TEXT svg_coord STR svg_attribute
 			
-svg_attribute -> STR | ε
+svg_attribute -> STR 
+	       | ε
 
 svg_coord -> NUMBER COMMA NUMBER
 ```
