@@ -82,30 +82,30 @@ svg_coord -> NUMBER COMMA NUMBER
 
 ## The functionalities implemented
 
-| Markdown                        | HTML                |
-| ------------------------------- | ------------------- |
-| Paragraph                       | <p> tag             |
-| Bold text (**...**)             | <b> tag             |
-| Italic text (*...*)             | <i> tag             |
-| Underlined text (__...__)       | <u> tag             |
-| Strikethrough text (~~...~~)    | <s> tag             |
-| Titles (# to ######)            | <h1> to <h6> tags   |
-| Quotes (> ...)                  | <blockquote> tag    |
-| Inline code (`...`)             | <code> tag          |
-| Block code (```...```)          | <pre> tag           |
-| SVG extension (```xsvg  ...```) | See the table below |
-| Horizontal rule (---)           | <hr> tag            |
+| Markdown                            | HTML                    |
+| ----------------------------------- | ----------------------- |
+| ` Paragraph  `                      | `<p> tag  `             |
+| `Bold text (**...**) `              | ` <b> tag  `            |
+| Italic text (*...*)                 | ` <i> tag  `            |
+| `Underlined text (__...__)  `       | ` <u> tag  `            |
+| `Strikethrough text (~~...~~)  `    | `<s> tag `              |
+| `  Titles (# to ######)  `          | `<h1> to <h6> tags  `   |
+| ` Quotes (> ...)  `                 | ` <blockquote> tag  `   |
+| `Inline code (`...`) `              | ` <code> tag  `         |
+| `Block code (```...```)  `          | `<pre> tag  `           |
+| `SVG extension (```xsvg  ...```)  ` | `See the table below  ` |
+| `Horizontal rule (---)  `           | `<hr> tag`              |
 
 For the SVG functionalities:
 
-| SVG extension                                  | SVG            |
-| ---------------------------------------------- | -------------- |
-| line x1,y1 x2,y2 (color)                       | <line> tag     |
-| polyline x1,y1 ...(color)                      | <polyline> tag |
-| polygon x1,y1 ...(color-fill)  (color-stroke)  | <polygon> tag  |
-| circle x,y r (color-fill)  (color-stroke)      | <circle> tag   |
-| ellipse x,y rx ry  (color-fill) (color-stroke) | <ellipse> tag  |
-| rect x,y w h (color-fill)  (color-stroke)      | <rect> tag     |
+| `SVG extension  `                                   | SVG                |
+| --------------------------------------------------- | ------------------ |
+| ` ellipse x,y rx ry  (color-fill) (color-stroke) `  | `<ellipse> tag  `  |
+| `line x1,y1 x2,y2 (color)  `                        | `<line> tag  `     |
+| `polyline x1,y1 ...(color)  `                       | `<polyline> tag  ` |
+| `  polygon x1,y1 ...(color-fill)  (color-stroke)  ` | `<polygon> tag  `  |
+| `circle x,y r (color-fill)  (color-stroke)  `       | `<circle> tag  `   |
+| `rect x,y w h (color-fill)  (color-stroke)  `       | `<rect> tag  `     |
 
 ## **Test**
 
