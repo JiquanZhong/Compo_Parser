@@ -98,7 +98,7 @@ svg_coord -> NUMBER COMMA NUMBER
 
 For the SVG functionalities:
 
-| `SVG extension  `                                   | SVG                |
+| SVG extension                                       | SVG                |
 | --------------------------------------------------- | ------------------ |
 | ` ellipse x,y rx ry  (color-fill) (color-stroke) `  | `<ellipse> tag  `  |
 | `line x1,y1 x2,y2 (color)  `                        | `<line> tag  `     |
