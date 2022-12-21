@@ -33,7 +33,7 @@
 document -> block_list
 
 block_list -> block BLANK_LINE block_list
-	        | block
+	     | block
 
 block -> HRULE
        | QUOTE TEXT
@@ -47,11 +47,11 @@ block -> HRULE
        | paragraph
        | svg
 
-Paragraph -> line NEWLINE paragraph
-		   | line
+Paragraph -> line NEWLINE paragraph 
+		| line
 
 Line -> text line
-		  | text
+	| text
 
 text -> TEXT
       | BOLD text BOLD
