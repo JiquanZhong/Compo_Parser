@@ -1,9 +1,14 @@
+# Overview
+
+This project is a compiler that converts md to html. The scanning process uses Flex, and the parsing process uses Bison. Both ast and code generation are implemented by C language. 
+
 ## How to run the program
+
 1. Put the target markdown file in tests directory
 
-2. Installing Flex(version >= 2.5.35) and Bison(version >= 3.8.2)
+2. Installing Flex(2.5.35) and Bison(3.8.2)
 
-3. Change the Makefile permissions if necessary
+3. Change the Makefile permissions if necessary (optional)
   ```
   sudo chmod 777 Makefile
   ```
