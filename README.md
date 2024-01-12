@@ -16,7 +16,7 @@ This project is a compiler that converts md to html. The scanning process uses F
 4. Compiling the object file
 
   ```
-  ./Makefile
+  make
   ```
 
   Attention:
